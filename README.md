@@ -1,8 +1,8 @@
 # Preparation for R and Single Cell Multiomics Workshop
 
-### Dec 17, 2025
+## Workshop afternoon of Dec 17, 2025
 
-## Install R, the Seurat R package and other R packages, and RStudio or other IDE
+## Install R, RStudio or other IDE, the Seurat and Signac R packages and other R packages, workshop data sets
 
 ### IMPORTANT: This may take over an hour. You must do this before the workshop
 
@@ -121,15 +121,34 @@ indiviually before trying to install
 BiocManager::install("clusterProfiler") 
 ```
 
-###### If one or more of these failed you may need to update R or RStudio
+If one or more of these failed you may need to update R or RStudio
 
-###### 
-
-###### 4.2 If you have other problems update R
+#### 4 If you have other problems update R
 
 -   See the instructions in point 1 above to install R.
 -   In RStudio, you may have to point RStudio to the correct version by using the Tools drop down, then Global Options
 -   In any case, you will need to restart RStudionand confirm that it using the expected new verions. Type `R.version.string` at the R prompt.
 -   Reinstall all packages above (they may need to be upgraded).
 
-### Download data needed for the workshop
+## Download data needed for the workshop
+
+### CITE seq tutorial at
+
+https://satijalab.org/seurat/articles/multimodal_vignette
+
+#### Download these data files
+
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
+
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz
+
+
+### ATAC seq tutorial at
+
+https://stuartlab.org/signac/articles/pbmc_vignette.html
+
+#### Download these data files:
+
+
+
+
