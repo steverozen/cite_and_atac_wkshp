@@ -50,6 +50,16 @@ gr0 <- GRanges(Rle(c("chr2", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
 ```
 
 ``` r
+install.packages("hdf5r")
+```
+```r
+library(hdf5r)
+test_filename <- tempfile(fileext = ".h5")
+file.h5 <- H5File$new(test_filename, mode = "w")
+file.h5
+```
+
+``` r
 install.packages("Signac")
 ```
 
