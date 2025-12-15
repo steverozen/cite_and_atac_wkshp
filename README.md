@@ -26,7 +26,9 @@ If you prefer you can use Positron: https://posit.co/products/ide/positron/ or V
 
 Make sure you can run RStudio. If when you run it it suggests an update then update it
 
-#### 3 In RStudio (or other interactive development environment), in an R console, enter the following R commands:
+#### 3 In RStudio (or other interactive development environment), in an R console, enter the following R commands
+
+These install packages you will need and test that you can load and use the packages.
 
 ``` r
 install.packages("BiocManager")
@@ -96,7 +98,28 @@ library(AnnotationHub)
 AnnotationHub()[1]
 ```
 
-BiocManager::install("AnnotationDbi") install.packages("igraph") BiocManager::install('enrichplot') BiocManager::install("clusterProfiler") BiocManager::install("org.Hs.eg.db")
+``` r
+BiocManager::install("AnnotationDbi")
+```
+```r
+BiocManager::install("org.Hs.eg.db")
+```
+```r
+install.packages("igraph")
+```
+```r
+BiocManager::install('enrichplot')
+```
+
+This next package `clusterProfiler` has a lot of dependencies.
+If there issues installing dependencies you may 
+have better success installing the dependencies
+indiviually before trying to install
+`clusterProfiler` again.
+
+```r
+BiocManager::install("clusterProfiler") 
+```
 
 ###### If one or more of these failed you may need to update R or RStudio
 
