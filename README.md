@@ -10,15 +10,15 @@ Send email to sr110\@duke.edu if you have problems.
 
 Please let me know if you find errors in these instructions.
 
-#### 1 If not already installed, install R from https://cloud.r-project.org/
+### 1 If not already installed, install R from https://cloud.r-project.org/
 
 Select Download R for macOS or Windows (or Linux) depending on your computer's operating system.
 
-#### 1.1 If R is installed, but version is \< 4.5 I suggest you upgrade now using the instructions above
+### 1.1 If R is installed, but version is \< 4.5 I suggest you upgrade now using the instructions above
 
 To find your version of R type `R.version.string` at the R prompt.
 
-#### 2 If not already installed, install RStudio from https://posit.co/download/rstudio-desktop/
+### 2 If not already installed, install RStudio from https://posit.co/download/rstudio-desktop/
 
 Select choice "2: Install RStudio", assuming you already have R installed.
 
@@ -26,7 +26,7 @@ If you prefer you can use Positron: https://posit.co/products/ide/positron/ or V
 
 Make sure you can run RStudio. If when you run it it suggests an update then update it
 
-#### 3 In RStudio (or other interactive development environment), in an R console, enter the following R commands
+### 3 In RStudio (or other interactive development environment), in an R console, enter the following R commands
 
 These install packages you will need and test that you can load and use the packages.
 
@@ -133,7 +133,7 @@ BiocManager::install("clusterProfiler")
 
 If one or more of these failed you may need to update R or RStudio
 
-#### 4 If you have other problems update R
+### 4 If you have other problems update R
 
 -   See the instructions in point 1 above to install R.
 -   In RStudio, you may have to point RStudio to the correct version by using the Tools drop down, then Global Options
@@ -146,7 +146,19 @@ If one or more of these failed you may need to update R or RStudio
 
 https://satijalab.org/seurat/articles/multimodal_vignette
 
-#### Download these data files to your current working directory
+#### Download these data files to the directory you will be working in
+
+Then, in the tutorial, change e.g.
+
+``` r
+cbmc.rna <- as.sparse(read.csv(file = "/brahms/shared/vignette-data/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz",
+    sep = ",", header = TRUE, row.names = 1))
+```
+to
+``` r
+cbmc.rna <- as.sparse(read.csv(file = "GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz",
+    sep = ",", header = TRUE, row.names = 1))
+```
 
 https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
 
@@ -156,7 +168,7 @@ https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_
 
 https://stuartlab.org/signac/articles/pbmc_vignette.html
 
-#### Download these data files to your current working directory
+#### Download these data files to the directory you will be working in
 
 https://cf.10xgenomics.com/samples/cell-atac/2.1.0/10k_pbmc_ATACv2_nextgem_Chromium_Controller/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5
 
