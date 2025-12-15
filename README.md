@@ -136,6 +136,12 @@ If one or more of these failed you may need to update R or RStudio
 
 https://satijalab.org/seurat/articles/multimodal_vignette
 
+Data files:
+
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
+
+
+
 ### ATAC seq tutorial at
 
 https://stuartlab.org/signac/articles/pbmc_vignette.html
