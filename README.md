@@ -148,7 +148,11 @@ https://satijalab.org/seurat/articles/multimodal_vignette
 
 #### Download these data files to the directory you will be working in
 
-Then, in the tutorial, change e.g.
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
+
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz
+
+Then, in the workshop, you will change e.g.
 
 ``` r
 cbmc.rna <- as.sparse(read.csv(file = "/brahms/shared/vignette-data/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz",
@@ -159,10 +163,6 @@ to
 cbmc.rna <- as.sparse(read.csv(file = "GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz",
     sep = ",", header = TRUE, row.names = 1))
 ```
-
-https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
-
-https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz
 
 ### ATAC seq tutorial at
 
