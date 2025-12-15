@@ -130,10 +130,14 @@ If one or more of these failed you may need to update R or RStudio
 -   In any case, you will need to restart RStudionand confirm that it using the expected new verions. Type `R.version.string` at the R prompt.
 -   Reinstall all packages above (they may need to be upgraded).
 
-### Download data needed for the workshop
+## Download data needed for the workshop
 
-## ATAC seq tutorial at
+### ATAC seq tutorial at
 
 https://stuartlab.org/signac/articles/pbmc_vignette.html
+
+Download these files:
+
+
 
 
