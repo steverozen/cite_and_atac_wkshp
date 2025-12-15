@@ -136,20 +136,26 @@ If one or more of these failed you may need to update R or RStudio
 
 https://satijalab.org/seurat/articles/multimodal_vignette
 
-#### Download these data files
+#### Download these data files to your current working directory
 
 https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz
 
 https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz
 
-
 ### ATAC seq tutorial at
 
 https://stuartlab.org/signac/articles/pbmc_vignette.html
 
-#### Download these data files:
+#### Download these data files to your current working directory
+
+https://cf.10xgenomics.com/samples/cell-atac/2.1.0/10k_pbmc_ATACv2_nextgem_Chromium_Controller/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5
+
+https://cf.10xgenomics.com/samples/cell-atac/2.1.0/10k_pbmc_ATACv2_nextgem_Chromium_Controller/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz
 
 https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz.tbi
+
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv
+
 
 
 
