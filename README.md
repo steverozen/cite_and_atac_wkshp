@@ -131,3 +131,9 @@ If one or more of these failed you may need to update R or RStudio
 -   Reinstall all packages above (they may need to be upgraded).
 
 ### Download data needed for the workshop
+
+## ATAC seq tutorial at
+
+https://stuartlab.org/signac/articles/pbmc_vignette.html
+
+
