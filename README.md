@@ -123,9 +123,7 @@ BiocManager::install("clusterProfiler")
 
 ###### If one or more of these failed you may need to update R or RStudio
 
-###### 
-
-###### 4.2 If you have other problems update R
+##### 4 If you have other problems update R
 
 -   See the instructions in point 1 above to install R.
 -   In RStudio, you may have to point RStudio to the correct version by using the Tools drop down, then Global Options
