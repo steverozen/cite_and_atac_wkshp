@@ -149,6 +149,10 @@ https://stuartlab.org/signac/articles/pbmc_vignette.html
 
 #### Download these data files:
 
+https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz.tbi
+
+
+
 
 
 
