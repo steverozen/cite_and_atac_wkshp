@@ -132,6 +132,10 @@ If one or more of these failed you may need to update R or RStudio
 
 ## Download data needed for the workshop
 
+### CITE seq tutorial at
+
+https://satijalab.org/seurat/articles/multimodal_vignette
+
 ### ATAC seq tutorial at
 
 https://stuartlab.org/signac/articles/pbmc_vignette.html
