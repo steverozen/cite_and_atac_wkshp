@@ -2,7 +2,7 @@
 
 ### Dec 17, 2025
 
-## Install R, the Seurat R package and other R packages, and RStudio or other IDE
+## Install R, RStudion or other IDE, the Seurat and Signac R packages and other R packages, workshop data sets
 
 ### IMPORTANT: This may take over an hour. You must do this before the workshop
 
