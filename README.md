@@ -122,7 +122,7 @@ BiocManager::install('enrichplot')
 ```
 
 This next package `clusterProfiler` has a lot of dependencies.
-If there issues installing dependencies you may 
+If there are issues installing dependencies you may 
 have better success installing the dependencies
 indiviually before trying to install
 `clusterProfiler` again.
