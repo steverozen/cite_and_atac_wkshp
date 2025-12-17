@@ -1,0 +1,42 @@
+---
+title: "scATAC seq tutorial"
+format: html
+---
+
+From https://stuartlab.org/signac/articles/pbmc_vignette.html
+
+
+```{r}
+library(Signac)
+library(Seurat)
+library(GenomicRanges)
+library(ggplot2)
+library(patchwork)
+```
+
+
+```{r}
+counts <- 
+    Read10X_h5(
+    filename = "10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
+
+metadata <- read.csv(
+  file = "10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
+  header = TRUE,
+  row.names = 1
+)
+
+chrom_assay <- CreateChromatinAssay(
+  counts = counts,
+  sep = c(":", "-"),
+  fragments = "../10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz",
+  min.cells = 10,
+  min.features = 200
+)
+
+pbmc <- CreateSeuratObject(
+  counts = chrom_assay,
+  assay = "peaks",
+  meta.data = metadata
+)
+```
