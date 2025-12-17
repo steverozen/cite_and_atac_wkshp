@@ -2,6 +2,12 @@
 
 ## Workshop afternoon of Dec 17, 2025
 
+### New
+
+```r
+curl::curl_download("https://signac-objects.s3.amazonaws.com/pbmc_10k_v3.rds", destfile = "pbmc_10k_v3.rds")
+```
+
 ## Install R, RStudio or other IDE, the Seurat and Signac R packages and other R packages, workshop data sets
 
 ### IMPORTANT: This may take over an hour. You must do this before the workshop
