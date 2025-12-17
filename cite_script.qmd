@@ -212,7 +212,7 @@ untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")
 ```
 
 ```{r}
-#| eval: falise
+#| eval: false
 # Cannot easily get the data set
 # This is the wrong data set:
 pbmc10k.data <- Read10X(data.dir = "filtered_gene_bc_matrices/hg19")

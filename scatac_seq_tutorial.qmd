@@ -14,11 +14,20 @@ library(ggplot2)
 library(patchwork)
 ```
 
+The following required for standardChromosomes()
+```{r}
+library(GenomeInfoDb)
+```
+
+```{r}
+BiocManager::install("biovizBase")
+library(biovizBase)
+```
 
 ```{r}
 counts <- 
     Read10X_h5(
-    filename = "10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
+    filename = "../10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
 
 metadata <- read.csv(
   file = "10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
@@ -40,3 +49,303 @@ pbmc <- CreateSeuratObject(
   meta.data = metadata
 )
 ```
+
+
+```{r}
+pbmc
+```
+
+
+```{r}
+pbmc[['peaks']]
+```
+
+
+```{r}
+granges(pbmc)
+```
+
+
+```{r}
+peaks.keep <- seqnames(granges(pbmc)) %in% standardChromosomes(granges(pbmc))
+pbmc <- pbmc[as.vector(peaks.keep), ]
+```
+
+```{r}
+library(AnnotationHub)
+ah <- AnnotationHub()
+
+# Search for the Ensembl 98 EnsDb for Homo sapiens on AnnotationHub
+query(ah, "EnsDb.Hsapiens.v98")
+```
+
+
+```{r}
+ensdb_v98 <- ah[["AH75011"]]
+```
+
+
+```{r}
+# extract gene annotations from EnsDb
+annotations <- GetGRangesFromEnsDb(ensdb = ensdb_v98)
+
+# change to UCSC style since the data was mapped to hg38
+seqlevels(annotations) <- paste0('chr', seqlevels(annotations))
+genome(annotations) <- "hg38"
+```
+
+
+```{r}
+# add the gene information to the object
+Annotation(pbmc) <- annotations
+```
+
+
+```{r}
+# compute nucleosome signal score per cell
+pbmc <- NucleosomeSignal(object = pbmc)
+
+# compute TSS enrichment score per cell
+pbmc <- TSSEnrichment(object = pbmc)
+
+# add fraction of reads in peaks
+pbmc$pct_reads_in_peaks <- pbmc$peak_region_fragments / pbmc$passed_filters * 100
+
+# add blacklist ratio
+pbmc$blacklist_ratio <- FractionCountsInRegion(
+  object = pbmc, 
+  assay = 'peaks',
+  regions = blacklist_hg38_unified
+)
+```
+
+
+```{r}
+DensityScatter(pbmc, x = 'nCount_peaks', y = 'TSS.enrichment', log_x = TRUE, quantiles = TRUE)
+```
+
+
+```{r}
+pbmc$nucleosome_group <- ifelse(pbmc$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
+FragmentHistogram(object = pbmc, group.by = 'nucleosome_group')
+```
+
+
+```{r}
+VlnPlot(
+  object = pbmc,
+  features = c('nCount_peaks', 'TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal', 'pct_reads_in_peaks'),
+  pt.size = 0.1,
+  ncol = 5
+)
+```
+
+
+```{r}
+pbmc <- subset(
+  x = pbmc,
+  subset = nCount_peaks > 9000 &
+    nCount_peaks < 100000 &
+    pct_reads_in_peaks > 40 &
+    blacklist_ratio < 0.01 &
+    nucleosome_signal < 4 &
+    TSS.enrichment > 4
+)
+pbmc
+```
+
+#### Normalization and linear dimensional reduction
+
+```{r}
+pbmc <- RunTFIDF(pbmc)
+pbmc <- FindTopFeatures(pbmc, min.cutoff = 'q0')
+pbmc <- RunSVD(pbmc)
+```
+
+
+```{r}
+DepthCor(pbmc)
+```
+
+
+#### Non-linear dimension reduction and clustering
+
+```{r}
+pbmc <- RunUMAP(object = pbmc, reduction = 'lsi', dims = 2:30)
+pbmc <- FindNeighbors(object = pbmc, reduction = 'lsi', dims = 2:30)
+pbmc <- FindClusters(object = pbmc, verbose = FALSE, algorithm = 3)
+DimPlot(object = pbmc, label = TRUE) + NoLegend()
+```
+
+#### Create a gene activity matrix
+
+```{r}
+gene.activities <- GeneActivity(pbmc)
+```
+
+### Start HERE
+
+```{r}
+# add the gene activity matrix to the Seurat object as a new assay and normalize it
+pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
+pbmc <- NormalizeData(
+  object = pbmc,
+  assay = 'RNA',
+  normalization.method = 'LogNormalize',
+  scale.factor = median(pbmc$nCount_RNA)
+)
+```
+
+
+```{r}
+DefaultAssay(pbmc) <- 'RNA'
+
+FeaturePlot(
+  object = pbmc,
+  features = c('MS4A1', 'CD3D', 'LEF1', 'NKG7', 'TREM1', 'LYZ'),
+  pt.size = 0.1,
+  max.cutoff = 'q95',
+  ncol = 3
+)
+```
+
+#### Integrating with scRNA-seq data
+
+
+```{r}
+# Load the pre-processed scRNA-seq data for PBMCs
+pbmc_rna <- readRDS("pbmc_10k_v3.rds")
+pbmc_rna <- UpdateSeuratObject(pbmc_rna)
+```
+
+
+```{r}
+transfer.anchors <- FindTransferAnchors(
+  reference = pbmc_rna,
+  query = pbmc,
+  reduction = 'cca'
+)
+```
+
+```{r}
+predicted.labels <- TransferData(
+  anchorset = transfer.anchors,
+  refdata = pbmc_rna$celltype,
+  weight.reduction = pbmc[['lsi']],
+  dims = 2:30
+)
+```
+
+```{r}
+pbmc <- AddMetaData(object = pbmc, metadata = predicted.labels)
+```
+
+
+```{r}
+plot1 <- DimPlot(
+  object = pbmc_rna,
+  group.by = 'celltype',
+  label = TRUE,
+  repel = TRUE) + NoLegend() + ggtitle('scRNA-seq')
+
+plot2 <- DimPlot(
+  object = pbmc,
+  group.by = 'predicted.id',
+  label = TRUE,
+  repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
+
+plot1 + plot2
+```
+
+
+
+```{r}
+predicted_id_counts <- table(pbmc$predicted.id)
+
+# Identify the predicted.id values that have more than 20 cells
+major_predicted_ids <- names(predicted_id_counts[predicted_id_counts > 20])
+pbmc <- pbmc[, pbmc$predicted.id %in% major_predicted_ids]
+```
+
+
+```{r}
+# change cell identities to the per-cell predicted labels
+Idents(pbmc) <- pbmc$predicted.id
+```
+
+### Find differentially accessible peaks between cell types
+
+
+```{r}
+# change back to working with peaks instead of gene activities
+DefaultAssay(pbmc) <- 'peaks'
+
+# wilcox is the default option for test.use
+da_peaks <- FindMarkers(
+  object = pbmc,
+  ident.1 = "CD4 Naive",
+  ident.2 = "CD14+ Monocytes",
+  test.use = 'wilcox',
+  min.pct = 0.1
+)
+
+head(da_peaks)
+```
+
+
+```{r}
+plot1 <- VlnPlot(
+  object = pbmc,
+  features = rownames(da_peaks)[1],
+  pt.size = 0.1,
+  idents = c("CD4 Naive","CD14+ Monocytes")
+)
+plot2 <- FeaturePlot(
+  object = pbmc,
+  features = rownames(da_peaks)[1],
+  pt.size = 0.1
+)
+
+plot1 | plot2
+```
+
+
+```{r}
+open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
+open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
+
+closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
+closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
+```
+
+
+```{r}
+head(closest_genes_cd4naive)
+```
+
+
+```{r}
+head(closest_genes_cd14mono)
+```
+
+#### Plotting genomic regions
+
+```{r}
+
+pbmc <- SortIdents(pbmc)
+```
+
+
+```{r}
+# find DA peaks overlapping gene of interest
+regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), LookupGeneCoords(pbmc, "CD4"))
+
+CoveragePlot(
+  object = pbmc,
+  region = "CD4",
+  region.highlight = regions_highlight,
+  extend.upstream = 1000,
+  extend.downstream = 1000
+)
+```
+
