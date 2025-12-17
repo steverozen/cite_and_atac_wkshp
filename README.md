@@ -137,7 +137,7 @@ If one or more of these failed you may need to update R or RStudio
 
 -   See the instructions in point 1 above to install R.
 -   In RStudio, you may have to point RStudio to the correct version by using the Tools drop down, then Global Options
--   In any case, you will need to restart RStudionand confirm that it using the expected new verions. Type `R.version.string` at the R prompt.
+-   In any case, you will need to restart RStudion and confirm that it using the expected new versions. Type `R.version.string` at the R prompt.
 -   Reinstall all packages above (they may need to be upgraded).
 
 ## Download data needed for the workshop
