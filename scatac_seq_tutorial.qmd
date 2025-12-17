@@ -216,7 +216,7 @@ FeaturePlot(
 
 ```{r}
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("pbmc_10k_v3.rds")
+pbmc_rna <- readRDS("../pbmc_10k_v3.rds")
 pbmc_rna <- UpdateSeuratObject(pbmc_rna)
 ```
 
