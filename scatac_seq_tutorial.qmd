@@ -25,6 +25,10 @@ library(biovizBase)
 ```
 
 ```{r}
+curl::curl_download("https://signac-objects.s3.amazonaws.com/pbmc_10k_v3.rds", destfile = "pbmc_10k_v3.rds")
+```
+
+```{r}
 counts <- 
     Read10X_h5(
     filename = "../10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
@@ -182,8 +186,6 @@ DimPlot(object = pbmc, label = TRUE) + NoLegend()
 ```{r}
 gene.activities <- GeneActivity(pbmc)
 ```
-
-### Start HERE
 
 ```{r}
 # add the gene activity matrix to the Seurat object as a new assay and normalize it
@@ -346,6 +348,19 @@ CoveragePlot(
   region.highlight = regions_highlight,
   extend.upstream = 1000,
   extend.downstream = 1000
+)
+```
+
+
+```{r}
+regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd14mono), LookupGeneCoords(pbmc, "LYZ"))
+
+CoveragePlot(
+  object = pbmc,
+  region = "LYZ",
+  region.highlight = regions_highlight,
+  extend.upstream = 1000,
+  extend.downstream = 5000
 )
 ```
 
