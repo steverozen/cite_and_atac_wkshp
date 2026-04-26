@@ -1,7 +1,5 @@
 # Preparation for R and Single Cell Multiomics Workshop
 
-## Workshop afternoon of Dec 17, 2025
-
 ## Install R, RStudio or other IDE, the Seurat and Signac R packages and other R packages, workshop data sets
 
 ### IMPORTANT: This may take over an hour. You must do this before the workshop
