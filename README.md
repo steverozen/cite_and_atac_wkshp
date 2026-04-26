@@ -185,7 +185,7 @@ https://cf.10xgenomics.com/samples/cell-atac/2.1.0/10k_pbmc_ATACv2_nextgem_Chrom
 
 https://cf.10xgenomics.com/samples/cell-atac/2.1.0/10k_pbmc_ATACv2_nextgem_Chromium_Controller/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz.tbi
 
-"Pre-processed scRNA-seq dataset for human PBMCs from 10X" 164M
+"Pre-processed scRNA-seq dataset for human PBMCs from 10X" (164M)
 
 https://signac-objects.s3.amazonaws.com/pbmc_10k_v3.rds
 
