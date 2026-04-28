@@ -20,18 +20,19 @@ library(GenomeInfoDb)
 ```
 
 ```{r}
-BiocManager::install("biovizBase")
+## BiocManager::install("biovizBase")
 library(biovizBase)
 ```
 
 ```{r}
-curl::curl_download("https://signac-objects.s3.amazonaws.com/pbmc_10k_v3.rds", destfile = "pbmc_10k_v3.rds")
+curl::curl_download("https://signac-objects.s3.amazonaws.com/pbmc_10k_v3.rds",
+ destfile = "pbmc_10k_v3.rds")
 ```
 
 ```{r}
 counts <- 
     Read10X_h5(
-    filename = "../10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
+    filename = here::here("gitignore/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5"))
 
 metadata <- read.csv(
   file = "10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
@@ -42,7 +43,7 @@ metadata <- read.csv(
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
-  fragments = "../10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz",
+  fragments = here::here("gitignore/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz"),
   min.cells = 10,
   min.features = 200
 )
@@ -83,6 +84,14 @@ ah <- AnnotationHub()
 query(ah, "EnsDb.Hsapiens.v98")
 ```
 
+
+In the next code block, AH75011 is the AnnotationHub accession ID for the Ensembl 98 EnsDb for Homo sapiens, i.e., a specific record in the AnnotationHub database.                                 
+                                                                                         
+The ah[["AH75011"]] call downloads (and caches) that record and returns it as an EnsDb 
+object — a SQLite-backed Ensembl annotation database for human, Ensembl release 98,    
+mapped to GRCh38. It contains gene/transcript/exon coordinates, biotypes, and          
+identifiers, which the next chunk feeds into GetGRangesFromEnsDb() to build the gene
+annotation GRanges attached to the Signac object.
 
 ```{r}
 ensdb_v98 <- ah[["AH75011"]]
@@ -216,7 +225,7 @@ FeaturePlot(
 
 ```{r}
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("../pbmc_10k_v3.rds")
+pbmc_rna <- readRDS(here::here("gitignore/pbmc_10k_v3.rds"))
 pbmc_rna <- UpdateSeuratObject(pbmc_rna)
 ```
 
