@@ -16,6 +16,7 @@ library(patchwork)
 ```{r}
 #| eval: false
 # Just download once
+# Change to eval: true if you need to download
 
 curl_download("https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/main/GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.gz",
 destfile = "GSE100866_CBMC_8K_13AB_10X-ADT_umi.csv.g")
@@ -24,6 +25,8 @@ curl_download("https://github.com/steverozen/cite_and_atac_wkshp/raw/refs/heads/
 desftile = "GSE100866_CBMC_8K_13AB_10X-RNA_umi.csv.gz"")
 
 ```
+
+This next cell might take a minute or 2
 
 ```{r}
 # Load in the RNA UMI matrix
@@ -108,7 +111,7 @@ cbmc <- NormalizeData(cbmc)
 cbmc <- FindVariableFeatures(cbmc)
 cbmc <- ScaleData(cbmc)
 cbmc <- RunPCA(cbmc, verbose = FALSE)
-cbmc <- FindNeighbors(cbmc, dims = 1:30)
+cbmc <- FindNeighbors(cbmc, dims = 1:30) ### Go to slides explaining cluster
 cbmc <- FindClusters(cbmc, resolution = 0.8, verbose = FALSE)
 cbmc <- RunUMAP(cbmc, dims = 1:30)
 DimPlot(cbmc, label = TRUE)
@@ -117,7 +120,7 @@ DimPlot(cbmc, label = TRUE)
 
 ```{r}
 # Normalize ADT data,
-DefaultAssay(cbmc) <- "ADT"
+DefaultAssay(cbmc) <- "ADT" # Antibody derived tag
 cbmc <- NormalizeData(cbmc, normalization.method = "CLR", margin = 2)
 DefaultAssay(cbmc) <- "RNA"
 
@@ -138,18 +141,21 @@ p1 | p2
 
 ```{r}
 # Alternately, we can use specific assay keys to specify a specific modality Identify the key
-# for the RNA and protein assays
+# for the RNA and protein assays.
+# Here we ask what the RNA key is.
 Key(cbmc[["RNA"]])
 ```
 
 
 ```{r}
+# Here we ask what the ADT key is.
 Key(cbmc[["ADT"]])
 ```
 
 
 ```{r}
-# Now, we can include the key in the feature name, which overrides the default assay
+# Now, we can include the key in the feature name, which overrides the default assay.
+# I.e. we prepend the key, such as "adt_", to the feature identifier, for example "CD19".
 p1 <- FeaturePlot(cbmc, "adt_CD19", cols = c("lightgrey", "darkgreen")) + ggtitle("CD19 protein")
 p2 <- FeaturePlot(cbmc, "rna_CD19") + ggtitle("CD19 RNA")
 p1 | p2
@@ -208,14 +214,21 @@ FeatureScatter(cbmc, feature1 = "adt_CD4", feature2 = "adt_CD8", slot = "counts"
 ### Loading data from 10X multi-modal experiments
 
 ```{r}
-untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")
+#| eval: false
+# Download once -- ~49 MB. Change to eval: true if you need to download.
+download.file(
+  "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_10k_protein_v3/pbmc_10k_protein_v3_filtered_feature_bc_matrix.tar.gz",
+  destfile = "pbmc_10k_protein_v3_filtered_feature_bc_matrix.tar.gz"
+)
 ```
 
 ```{r}
-#| eval: false
-# Cannot easily get the data set
-# This is the wrong data set:
-pbmc10k.data <- Read10X(data.dir = "filtered_gene_bc_matrices/hg19")
+untar("pbmc_10k_protein_v3_filtered_feature_bc_matrix.tar.gz")
+```
+
+```{r}
+# Read10X returns a named list with "Gene Expression" and "Antibody Capture"
+pbmc10k.data <- Read10X(data.dir = "filtered_feature_bc_matrix")
 
 rownames(x = pbmc10k.data[["Antibody Capture"]]) <- gsub(pattern = "_[control_]*TotalSeqB", replacement = "",
     x = rownames(x = pbmc10k.data[["Antibody Capture"]]))
